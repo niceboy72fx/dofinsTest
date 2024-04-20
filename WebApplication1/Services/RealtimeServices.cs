@@ -23,11 +23,11 @@ namespace WebApplication1.Services
         List<String> symbols = new List<string> { "CDC", "CTD", "DIG", "FTS", "GMD", "HAX", "KSB", "LPB", "NVL", "SSI", "SZC", "VIC", "VIX", "VND", "CEO", "HUT", "IDC" };
 
 
-        public async Task<Response> MockStockRealtime(List<Stock> stockCombine, DateTime dateTime) {
+        public async Task<Response> MockStockRealtime(List<IntradayQuote> stockCombine, DateTime dateTime) {
 
-            List<Stock> stockFilter = new List<Stock> { };            
+            List<IntradayQuote> stockFilter = new List<IntradayQuote> { };            
             Console.WriteLine(dateTime.ToString());
-            foreach (Stock stock in stockCombine)
+            foreach (IntradayQuote stock in stockCombine)
             {
                 if (stock.Date == dateTime)
                 {
@@ -39,7 +39,7 @@ namespace WebApplication1.Services
 
         public async Task<Response> FireAntRealTime(String token)
         {
-            List<Stock> stockCombine = new List<Stock> { };
+            List<IntradayQuote> stockCombine = new List<IntradayQuote> { };
             var hubConnection = new HubConnection("https://www.fireant.vn/", $"Token {token}");
 
             ServicePointManager.DefaultConnectionLimit = 200;
@@ -50,19 +50,11 @@ namespace WebApplication1.Services
                 {
                     if (!string.IsNullOrEmpty(messageIR))
                     {
-                        List<Stock> stocks = JsonConvert.DeserializeObject<Stock>(messageIR);
+                        List<IntradayQuote> stocks = JsonConvert.DeserializeObject<IntradayQuote>(messageIR);
                         foreach (var stock in stocks)
                         {
                             if (symbols.Contains(stock.Symbol))
                             {
-                                Console.WriteLine($"ID: {stock.ID}");
-                                Console.WriteLine($"Symbol: {stock.Symbol}");
-                                Console.WriteLine($"Date: {stock.Date}");
-                                Console.WriteLine($"Price: {stock.Price}");
-                                Console.WriteLine($"Volume: {stock.Volume}");
-                                Console.WriteLine($"TotalVolume: {stock.TotalVolume}");
-                                Console.WriteLine($"Side: {stock.Side}");
-                                Console.WriteLine("--------------");
                                 stockCombine.Add(stock);
                             }
                         }

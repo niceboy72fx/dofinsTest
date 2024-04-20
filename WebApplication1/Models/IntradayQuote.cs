@@ -1,8 +1,8 @@
 ﻿namespace WebApplication1.Models
 {
-    public class Stock
+    public class IntradayQuote
     {
-        public Stock() { }
+        public IntradayQuote() { }
         
         public int ID { get; set; }
         public string Symbol { get; set; }
@@ -12,7 +12,7 @@
         public double TotalVolume { get; set; }
         public string Side { get; set; }
 
-        public Stock(int id, string symbol, DateTime date, double price, double volume, double totalVolume, string side)
+        public IntradayQuote(int id, string symbol, DateTime date, double price, double volume, double totalVolume, string side)
         {
             this.ID = id;
             this.Symbol = symbol;

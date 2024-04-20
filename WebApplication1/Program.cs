@@ -45,9 +45,8 @@ app.Map("/mockData", async context =>
         }
         else
         {
-            List<Stock> stockCombine = new List<Stock> { };
-            List<String> symbols = new List<string> {   "CDC",
-  "CTD",
+            List<IntradayQuote> stockCombine = new List<IntradayQuote> { };
+            List<String> symbols = new List<string> {   "CDC","CTD",
   "DIG",
   "FTS",
   "GMD",
@@ -143,8 +142,8 @@ app.Map("/mockData", async context =>
                         if (response.IsSuccessStatusCode)
                         {
                             string data = await response.Content.ReadAsStringAsync();
-                            List<Stock> stocks = JsonConvert.DeserializeObject<List<Stock>>(data);
-                            foreach (Stock stock in stocks)
+                            List<IntradayQuote> stocks = JsonConvert.DeserializeObject<List<IntradayQuote>>(data);
+                            foreach (IntradayQuote stock in stocks)
                             {
                                 stockCombine.Add(stock);
                             }

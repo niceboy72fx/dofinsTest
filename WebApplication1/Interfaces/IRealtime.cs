@@ -6,6 +6,6 @@ namespace WebApplication1.Interfaces
     public interface IRealtime
     {
         Task<Response> FireAntRealTime(String token);
-        Task<Response> MockStockRealtime(List<Stock> stockCombine, DateTime dateTime);
+        Task<Response> MockStockRealtime(List<IntradayQuote> stockCombine, DateTime dateTime);
     }
 }

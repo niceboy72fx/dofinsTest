@@ -7,10 +7,10 @@ namespace WebApplication1.DTO.Response
     {
         public HttpStatusCode Status  { get; set; }
         public string Message { get; set; }
-        public List<Stock> Data { get; set; }
+        public List<IntradayQuote> Data { get; set; }
 
 
-        public Response(HttpStatusCode Status, string Message, List<Stock> Data)
+        public Response(HttpStatusCode Status, string Message, List<IntradayQuote> Data)
         {
             this.Status = Status;
             this.Message = Message;
