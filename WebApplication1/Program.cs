@@ -46,18 +46,7 @@ app.Map("/mockData", async context =>
         else
         {
             List<IntradayQuote> stockCombine = new List<IntradayQuote> { };
-            List<String> symbols = new List<string> {   "CDC","CTD",
-  "DIG",
-  "FTS",
-  "GMD",
-  "HAX",
-  "KSB",
-  "LPB",
-  "NVL",
-  "SSI",
-  "SZC",
-  "VIC",
-  "VIX",
+            List<String> symbols = new List<string> {   "CDC","CTD","DIG","FTS","GMD","HAX","KSB","LPB","NVL","SSI","SZC","VIC","VIX",
   "VND",
   "CEO",
   "HUT",
@@ -191,7 +180,7 @@ app.Map("/mockData", async context =>
 });
 
 
-app.Map("/fireAnt", async context =>
+app.Map("/invoke-get-all-quote", async context =>
 {
 
     if (context.WebSockets.IsWebSocketRequest)
@@ -208,7 +197,7 @@ app.Map("/fireAnt", async context =>
         {
             while (true)
             {
-                var stockServices = await realtimeServices.FireAntRealTime(token);
+                var stockServices = await realtimeServices.InvokeGetAllQuotes(token);
                 var message = Newtonsoft.Json.JsonConvert.SerializeObject(stockServices);
                 var bytes = Encoding.UTF8.GetBytes(message);
                 var arraySegment = new ArraySegment<byte>(bytes, 0, bytes.Length);
@@ -229,6 +218,165 @@ app.Map("/fireAnt", async context =>
         context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
     }
 });
+
+app.Map("/invoke-get-update-market", async context =>
+{
+
+    if (context.WebSockets.IsWebSocketRequest)
+    {
+        using var ws = await context.WebSockets.AcceptWebSocketAsync();
+        var authenticationServices = app.Services.GetRequiredService<IAuthentication>();
+        var realtimeServices = app.Services.GetRequiredService<IRealtime>();
+        String token = await authenticationServices.GetTokenFireAnt();
+        if (string.IsNullOrEmpty(token))
+        {
+            Console.WriteLine("Failed to retrieve token.");
+        }
+        else
+        {
+            while (true)
+            {
+                var stockServices = await realtimeServices.InvokeUpdateMarket(token);
+                var message = Newtonsoft.Json.JsonConvert.SerializeObject(stockServices);
+                var bytes = Encoding.UTF8.GetBytes(message);
+                var arraySegment = new ArraySegment<byte>(bytes, 0, bytes.Length);
+                if (ws.State == System.Net.WebSockets.WebSocketState.Open)
+                {
+                    await ws.SendAsync(arraySegment, System.Net.WebSockets.WebSocketMessageType.Text, true, CancellationToken.None);
+                }
+                else if (ws.State == System.Net.WebSockets.WebSocketState.Closed || ws.State == System.Net.WebSockets.WebSocketState.Aborted)
+                {
+                    break;
+                }
+                Thread.Sleep(1000);
+            }
+        }
+    }
+    else
+    {
+        context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+    }
+});
+
+app.Map("/update-market", async context =>
+{
+
+    if (context.WebSockets.IsWebSocketRequest)
+    {
+        using var ws = await context.WebSockets.AcceptWebSocketAsync();
+        var authenticationServices = app.Services.GetRequiredService<IAuthentication>();
+        var realtimeServices = app.Services.GetRequiredService<IRealtime>();
+        String token = await authenticationServices.GetTokenFireAnt();
+        if (string.IsNullOrEmpty(token))
+        {
+            Console.WriteLine("Failed to retrieve token.");
+        }
+        else
+        {
+            while (true)
+            {
+                var stockServices = await realtimeServices.UpdateMarket(token);
+                var message = Newtonsoft.Json.JsonConvert.SerializeObject(stockServices);
+                var bytes = Encoding.UTF8.GetBytes(message);
+                var arraySegment = new ArraySegment<byte>(bytes, 0, bytes.Length);
+                if (ws.State == System.Net.WebSockets.WebSocketState.Open)
+                {
+                    await ws.SendAsync(arraySegment, System.Net.WebSockets.WebSocketMessageType.Text, true, CancellationToken.None);
+                }
+                else if (ws.State == System.Net.WebSockets.WebSocketState.Closed || ws.State == System.Net.WebSockets.WebSocketState.Aborted)
+                {
+                    break;
+                }
+                Thread.Sleep(1000);
+            }
+        }
+    }
+    else
+    {
+        context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+    }
+});
+
+app.Map("/update-quote", async context =>
+{
+
+    if (context.WebSockets.IsWebSocketRequest)
+    {
+        using var ws = await context.WebSockets.AcceptWebSocketAsync();
+        var authenticationServices = app.Services.GetRequiredService<IAuthentication>();
+        var realtimeServices = app.Services.GetRequiredService<IRealtime>();
+        String token = await authenticationServices.GetTokenFireAnt();
+        if (string.IsNullOrEmpty(token))
+        {
+            Console.WriteLine("Failed to retrieve token.");
+        }
+        else
+        {
+            while (true)
+            {
+                var stockServices = await realtimeServices.UpdateQuote(token);
+                var message = Newtonsoft.Json.JsonConvert.SerializeObject(stockServices);
+                var bytes = Encoding.UTF8.GetBytes(message);
+                var arraySegment = new ArraySegment<byte>(bytes, 0, bytes.Length);
+                if (ws.State == System.Net.WebSockets.WebSocketState.Open)
+                {
+                    await ws.SendAsync(arraySegment, System.Net.WebSockets.WebSocketMessageType.Text, true, CancellationToken.None);
+                }
+                else if (ws.State == System.Net.WebSockets.WebSocketState.Closed || ws.State == System.Net.WebSockets.WebSocketState.Aborted)
+                {
+                    break;
+                }
+                Thread.Sleep(1000);
+            }
+        }
+    }
+    else
+    {
+        context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+    }
+});
+
+
+app.Map("/update-intraday-quote", async context =>
+{
+
+    if (context.WebSockets.IsWebSocketRequest)
+    {
+        using var ws = await context.WebSockets.AcceptWebSocketAsync();
+        var authenticationServices = app.Services.GetRequiredService<IAuthentication>();
+        var realtimeServices = app.Services.GetRequiredService<IRealtime>();
+        String token = await authenticationServices.GetTokenFireAnt();
+        if (string.IsNullOrEmpty(token))
+        {
+            Console.WriteLine("Failed to retrieve token.");
+        }
+        else
+        {
+            while (true)
+            {
+                var stockServices = await realtimeServices.UpdateIntradayQuote(token);
+                var message = Newtonsoft.Json.JsonConvert.SerializeObject(stockServices);
+                var bytes = Encoding.UTF8.GetBytes(message);
+                var arraySegment = new ArraySegment<byte>(bytes, 0, bytes.Length);
+                if (ws.State == System.Net.WebSockets.WebSocketState.Open)
+                {
+                    await ws.SendAsync(arraySegment, System.Net.WebSockets.WebSocketMessageType.Text, true, CancellationToken.None);
+                }
+                else if (ws.State == System.Net.WebSockets.WebSocketState.Closed || ws.State == System.Net.WebSockets.WebSocketState.Aborted)
+                {
+                    break;
+                }
+                Thread.Sleep(1000);
+            }
+        }
+    }
+    else
+    {
+        context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+    }
+});
+
+
 
 await app.RunAsync();
 

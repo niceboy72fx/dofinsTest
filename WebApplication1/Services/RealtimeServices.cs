@@ -37,7 +37,182 @@ namespace WebApplication1.Services
             return new Response(HttpStatusCode.Accepted, "FireAnt's RealTime", stockFilter);
         }
 
-        public async Task<Response> FireAntRealTime(String token)
+        public async Task<Response> UpdateQuote(String token)
+        {
+            List<IntradayQuote> stockCombine = new List<IntradayQuote> { };
+            var hubConnection = new HubConnection("https://www.fireant.vn/", $"Token {token}");
+
+            ServicePointManager.DefaultConnectionLimit = 200;
+            IHubProxy chatHubProxy = hubConnection.CreateHubProxy("AppQuoteHub");
+            try
+            {
+                chatHubProxy.On("updateIntradayQuote", messageIR =>
+                {
+                    if (!string.IsNullOrEmpty(messageIR))
+                    {
+                        List<IntradayQuote> stocks = JsonConvert.DeserializeObject<IntradayQuote>(messageIR);
+                        foreach (var stock in stocks)
+                        {
+                            if (symbols.Contains(stock.Symbol))
+                            {
+                                stockCombine.Add(stock);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Received empty message.");
+                    }
+                });
+            }
+            catch (Exception e)
+            {
+                return new Response(HttpStatusCode.BadGateway, $"Error: {e}", null);
+            }
+            try
+            {
+                await hubConnection.Start();
+            }
+            catch (Exception ex)
+            {
+                return new Response(HttpStatusCode.BadGateway, $"Error: {ex.Message}", null);
+            }
+            return new Response(HttpStatusCode.Accepted, "Mock's RealTime", stockCombine);
+        }
+
+        public async Task<Response> UpdateIntradayQuote(String token)
+        {
+            List<IntradayQuote> stockCombine = new List<IntradayQuote> { };
+            var hubConnection = new HubConnection("https://www.fireant.vn/", $"Token {token}");
+
+            ServicePointManager.DefaultConnectionLimit = 200;
+            IHubProxy chatHubProxy = hubConnection.CreateHubProxy("AppQuoteHub");
+            try
+            {
+                chatHubProxy.On("updateIntradayQuote", messageIR =>
+                {
+                    if (!string.IsNullOrEmpty(messageIR))
+                    {
+                        List<IntradayQuote> stocks = JsonConvert.DeserializeObject<IntradayQuote>(messageIR);
+                        foreach (var stock in stocks)
+                        {
+                            if (symbols.Contains(stock.Symbol))
+                            {
+                                stockCombine.Add(stock);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Received empty message.");
+                    }
+                });
+            }
+            catch (Exception e)
+            {
+                return new Response(HttpStatusCode.BadGateway, $"Error: {e}", null);
+            }
+            try
+            {
+                await hubConnection.Start();
+            }
+            catch (Exception ex)
+            {
+                return new Response(HttpStatusCode.BadGateway, $"Error: {ex.Message}", null);
+            }
+            return new Response(HttpStatusCode.Accepted, "Mock's RealTime", stockCombine);
+        }
+
+
+        public async Task<Response> UpdateMarket(String token)
+        {
+            List<IntradayQuote> stockCombine = new List<IntradayQuote> { };
+            var hubConnection = new HubConnection("https://www.fireant.vn/", $"Token {token}");
+
+            ServicePointManager.DefaultConnectionLimit = 200;
+            IHubProxy chatHubProxy = hubConnection.CreateHubProxy("AppQuoteHub");
+            try
+            {
+                chatHubProxy.On("updateIntradayQuote", messageIR =>
+                {
+                    if (!string.IsNullOrEmpty(messageIR))
+                    {
+                        List<IntradayQuote> stocks = JsonConvert.DeserializeObject<IntradayQuote>(messageIR);
+                        foreach (var stock in stocks)
+                        {
+                            if (symbols.Contains(stock.Symbol))
+                            {
+                                stockCombine.Add(stock);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Received empty message.");
+                    }
+                });
+            }
+            catch (Exception e)
+            {
+                return new Response(HttpStatusCode.BadGateway, $"Error: {e}", null);
+            }
+            try
+            {
+                await hubConnection.Start();
+            }
+            catch (Exception ex)
+            {
+                return new Response(HttpStatusCode.BadGateway, $"Error: {ex.Message}", null);
+            }
+            return new Response(HttpStatusCode.Accepted, "Mock's RealTime", stockCombine);
+        }
+
+
+        public async Task<Response> InvokeUpdateMarket(String token)
+        {
+            List<IntradayQuote> stockCombine = new List<IntradayQuote> { };
+            var hubConnection = new HubConnection("https://www.fireant.vn/", $"Token {token}");
+
+            ServicePointManager.DefaultConnectionLimit = 200;
+            IHubProxy chatHubProxy = hubConnection.CreateHubProxy("AppQuoteHub");
+            try
+            {
+                chatHubProxy.On("updateIntradayQuote", messageIR =>
+                {
+                    if (!string.IsNullOrEmpty(messageIR))
+                    {
+                        List<IntradayQuote> stocks = JsonConvert.DeserializeObject<IntradayQuote>(messageIR);
+                        foreach (var stock in stocks)
+                        {
+                            if (symbols.Contains(stock.Symbol))
+                            {
+                                stockCombine.Add(stock);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Received empty message.");
+                    }
+                });
+            }
+            catch (Exception e)
+            {
+                return new Response(HttpStatusCode.BadGateway, $"Error: {e}", null);
+            }
+            try
+            {
+                await hubConnection.Start();
+            }
+            catch (Exception ex)
+            {
+                return new Response(HttpStatusCode.BadGateway, $"Error: {ex.Message}", null);
+            }
+            return new Response(HttpStatusCode.Accepted, "Mock's RealTime", stockCombine);
+        }
+
+
+        public async Task<Response> InvokeGetAllQuotes(String token)
         {
             List<IntradayQuote> stockCombine = new List<IntradayQuote> { };
             var hubConnection = new HubConnection("https://www.fireant.vn/", $"Token {token}");
