@@ -2,7 +2,6 @@ using Newtonsoft.Json;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
-using WebApplication1.DTO.Response;
 using WebApplication1.Interfaces;
 using WebApplication1.Models;
 using WebApplication1.Services;
@@ -30,11 +29,11 @@ var app = builder.Build();
 app.UseWebSockets();
 app.Map("/mockData", async context =>
 {
-   
+
     if (context.WebSockets.IsWebSocketRequest)
     {
         string dateString = "2024-04-19T02:15:02.347Z";
-       
+
         using var ws = await context.WebSockets.AcceptWebSocketAsync();
         var authenticationServices = app.Services.GetRequiredService<IAuthentication>();
         var realtimeServices = app.Services.GetRequiredService<IRealtime>();
@@ -116,7 +115,7 @@ app.Map("/mockData", async context =>
   "VND",
   "HDB",
   "SHB" };
-           
+
             using (HttpClient httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.Accept.Clear();
@@ -180,13 +179,13 @@ app.Map("/mockData", async context =>
 });
 
 
-app.Map("/invoke-get-all-quote", async context =>
+app.Map("/invokeGetAllQuote", async context =>
 {
 
     if (context.WebSockets.IsWebSocketRequest)
     {
         using var ws = await context.WebSockets.AcceptWebSocketAsync();
-        var authenticationServices =  app.Services.GetRequiredService<IAuthentication>();
+        var authenticationServices = app.Services.GetRequiredService<IAuthentication>();
         var realtimeServices = app.Services.GetRequiredService<IRealtime>();
         String token = await authenticationServices.GetTokenFireAnt();
         if (string.IsNullOrEmpty(token))
@@ -198,18 +197,20 @@ app.Map("/invoke-get-all-quote", async context =>
             while (true)
             {
                 var stockServices = await realtimeServices.InvokeGetAllQuotes(token);
-                var message = Newtonsoft.Json.JsonConvert.SerializeObject(stockServices);
-                var bytes = Encoding.UTF8.GetBytes(message);
-                var arraySegment = new ArraySegment<byte>(bytes, 0, bytes.Length);
-                if (ws.State == System.Net.WebSockets.WebSocketState.Open)
+                if (stockServices.Data != null && stockServices.Data.Count > 0)
                 {
-                    await ws.SendAsync(arraySegment, System.Net.WebSockets.WebSocketMessageType.Text, true, CancellationToken.None);
+                    var message = Newtonsoft.Json.JsonConvert.SerializeObject(stockServices);
+                    var bytes = Encoding.UTF8.GetBytes(message);
+                    var arraySegment = new ArraySegment<byte>(bytes, 0, bytes.Length);
+                    if (ws.State == System.Net.WebSockets.WebSocketState.Open)
+                    {
+                        await ws.SendAsync(arraySegment, System.Net.WebSockets.WebSocketMessageType.Text, true, CancellationToken.None);
+                    }
+                    else if (ws.State == System.Net.WebSockets.WebSocketState.Closed || ws.State == System.Net.WebSockets.WebSocketState.Aborted)
+                    {
+                        break;
+                    }
                 }
-                else if (ws.State == System.Net.WebSockets.WebSocketState.Closed || ws.State == System.Net.WebSockets.WebSocketState.Aborted)
-                {
-                    break;
-                }
-                Thread.Sleep(1000);
             }
         }
     }
@@ -219,7 +220,7 @@ app.Map("/invoke-get-all-quote", async context =>
     }
 });
 
-app.Map("/invoke-get-update-market", async context =>
+app.Map("/invokeGetUpdateMarket", async context =>
 {
 
     if (context.WebSockets.IsWebSocketRequest)
@@ -237,18 +238,20 @@ app.Map("/invoke-get-update-market", async context =>
             while (true)
             {
                 var stockServices = await realtimeServices.InvokeUpdateMarket(token);
-                var message = Newtonsoft.Json.JsonConvert.SerializeObject(stockServices);
-                var bytes = Encoding.UTF8.GetBytes(message);
-                var arraySegment = new ArraySegment<byte>(bytes, 0, bytes.Length);
-                if (ws.State == System.Net.WebSockets.WebSocketState.Open)
+                if (stockServices.Data != null && stockServices.Data.Count > 0)
                 {
-                    await ws.SendAsync(arraySegment, System.Net.WebSockets.WebSocketMessageType.Text, true, CancellationToken.None);
+                    var message = Newtonsoft.Json.JsonConvert.SerializeObject(stockServices);
+                    var bytes = Encoding.UTF8.GetBytes(message);
+                    var arraySegment = new ArraySegment<byte>(bytes, 0, bytes.Length);
+                    if (ws.State == System.Net.WebSockets.WebSocketState.Open)
+                    {
+                        await ws.SendAsync(arraySegment, System.Net.WebSockets.WebSocketMessageType.Text, true, CancellationToken.None);
+                    }
+                    else if (ws.State == System.Net.WebSockets.WebSocketState.Closed || ws.State == System.Net.WebSockets.WebSocketState.Aborted)
+                    {
+                        break;
+                    }
                 }
-                else if (ws.State == System.Net.WebSockets.WebSocketState.Closed || ws.State == System.Net.WebSockets.WebSocketState.Aborted)
-                {
-                    break;
-                }
-                Thread.Sleep(1000);
             }
         }
     }
@@ -258,7 +261,7 @@ app.Map("/invoke-get-update-market", async context =>
     }
 });
 
-app.Map("/update-market", async context =>
+app.Map("/updateMarket", async context =>
 {
 
     if (context.WebSockets.IsWebSocketRequest)
@@ -276,18 +279,20 @@ app.Map("/update-market", async context =>
             while (true)
             {
                 var stockServices = await realtimeServices.UpdateMarket(token);
-                var message = Newtonsoft.Json.JsonConvert.SerializeObject(stockServices);
-                var bytes = Encoding.UTF8.GetBytes(message);
-                var arraySegment = new ArraySegment<byte>(bytes, 0, bytes.Length);
-                if (ws.State == System.Net.WebSockets.WebSocketState.Open)
+                if (stockServices.Data != null && stockServices.Data.Count > 0)
                 {
-                    await ws.SendAsync(arraySegment, System.Net.WebSockets.WebSocketMessageType.Text, true, CancellationToken.None);
+                    var message = Newtonsoft.Json.JsonConvert.SerializeObject(stockServices);
+                    var bytes = Encoding.UTF8.GetBytes(message);
+                    var arraySegment = new ArraySegment<byte>(bytes, 0, bytes.Length);
+                    if (ws.State == System.Net.WebSockets.WebSocketState.Open)
+                    {
+                        await ws.SendAsync(arraySegment, System.Net.WebSockets.WebSocketMessageType.Text, true, CancellationToken.None);
+                    }
+                    else if (ws.State == System.Net.WebSockets.WebSocketState.Closed || ws.State == System.Net.WebSockets.WebSocketState.Aborted)
+                    {
+                        break;
+                    }
                 }
-                else if (ws.State == System.Net.WebSockets.WebSocketState.Closed || ws.State == System.Net.WebSockets.WebSocketState.Aborted)
-                {
-                    break;
-                }
-                Thread.Sleep(1000);
             }
         }
     }
@@ -297,7 +302,7 @@ app.Map("/update-market", async context =>
     }
 });
 
-app.Map("/update-quote", async context =>
+app.Map("/updateQuote", async context =>
 {
 
     if (context.WebSockets.IsWebSocketRequest)
@@ -315,18 +320,20 @@ app.Map("/update-quote", async context =>
             while (true)
             {
                 var stockServices = await realtimeServices.UpdateQuote(token);
-                var message = Newtonsoft.Json.JsonConvert.SerializeObject(stockServices);
-                var bytes = Encoding.UTF8.GetBytes(message);
-                var arraySegment = new ArraySegment<byte>(bytes, 0, bytes.Length);
-                if (ws.State == System.Net.WebSockets.WebSocketState.Open)
+                if (stockServices.Data != null && stockServices.Data.Count > 0)
                 {
-                    await ws.SendAsync(arraySegment, System.Net.WebSockets.WebSocketMessageType.Text, true, CancellationToken.None);
+                    var message = Newtonsoft.Json.JsonConvert.SerializeObject(stockServices);
+                    var bytes = Encoding.UTF8.GetBytes(message);
+                    var arraySegment = new ArraySegment<byte>(bytes, 0, bytes.Length);
+                    if (ws.State == System.Net.WebSockets.WebSocketState.Open)
+                    {
+                        await ws.SendAsync(arraySegment, System.Net.WebSockets.WebSocketMessageType.Text, true, CancellationToken.None);
+                    }
+                    else if (ws.State == System.Net.WebSockets.WebSocketState.Closed || ws.State == System.Net.WebSockets.WebSocketState.Aborted)
+                    {
+                        break;
+                    }
                 }
-                else if (ws.State == System.Net.WebSockets.WebSocketState.Closed || ws.State == System.Net.WebSockets.WebSocketState.Aborted)
-                {
-                    break;
-                }
-                Thread.Sleep(1000);
             }
         }
     }
@@ -337,7 +344,7 @@ app.Map("/update-quote", async context =>
 });
 
 
-app.Map("/update-intraday-quote", async context =>
+app.Map("/updateIntradayQuote", async context =>
 {
 
     if (context.WebSockets.IsWebSocketRequest)
@@ -355,6 +362,48 @@ app.Map("/update-intraday-quote", async context =>
             while (true)
             {
                 var stockServices = await realtimeServices.UpdateIntradayQuote(token);
+                if (stockServices.Data != null && stockServices.Data.Count > 0)
+                {
+                    var message = Newtonsoft.Json.JsonConvert.SerializeObject(stockServices);
+                    var bytes = Encoding.UTF8.GetBytes(message);
+                    var arraySegment = new ArraySegment<byte>(bytes, 0, bytes.Length);
+                    if (ws.State == System.Net.WebSockets.WebSocketState.Open)
+                    {
+                        await ws.SendAsync(arraySegment, System.Net.WebSockets.WebSocketMessageType.Text, true, CancellationToken.None);
+                    }
+                    else if (ws.State == System.Net.WebSockets.WebSocketState.Closed || ws.State == System.Net.WebSockets.WebSocketState.Aborted)
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    else
+    {
+        context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+    }
+});
+
+
+app.Map("/fireAnt", async context =>
+{
+
+    if (context.WebSockets.IsWebSocketRequest)
+    {
+        using var ws = await context.WebSockets.AcceptWebSocketAsync();
+        var authenticationServices = app.Services.GetRequiredService<IAuthentication>();
+        var realtimeServices = app.Services.GetRequiredService<IRealtime>();
+        String token = await authenticationServices.GetTokenFireAnt();
+        if (string.IsNullOrEmpty(token))
+        {
+            Console.WriteLine("Failed to retrieve token.");
+        }
+        else
+        {
+            while (true)
+            {
+                var stockServices = await realtimeServices.FireAnt(token);
                 var message = Newtonsoft.Json.JsonConvert.SerializeObject(stockServices);
                 var bytes = Encoding.UTF8.GetBytes(message);
                 var arraySegment = new ArraySegment<byte>(bytes, 0, bytes.Length);
@@ -366,7 +415,6 @@ app.Map("/update-intraday-quote", async context =>
                 {
                     break;
                 }
-                Thread.Sleep(1000);
             }
         }
     }
@@ -375,7 +423,6 @@ app.Map("/update-intraday-quote", async context =>
         context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
     }
 });
-
 
 
 await app.RunAsync();

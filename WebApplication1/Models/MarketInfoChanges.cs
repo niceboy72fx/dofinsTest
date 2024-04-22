@@ -2,6 +2,7 @@
 {
     public class MarketInfoChanges
     {
+        public MarketInfoChanges() { }
         public string Exchange { get; set; }
 
         public DateTime? Date { get; set; }
@@ -104,4 +105,6 @@
 
         public double? QuantityAsk3 { get; set; }
     }
+
+    
 }

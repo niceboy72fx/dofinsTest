@@ -124,4 +124,6 @@
 
         public double QuantityAsk3 { get; set; }
     }
+
+
 }
