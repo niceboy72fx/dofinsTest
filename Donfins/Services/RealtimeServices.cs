@@ -4,12 +4,24 @@ using System.Net;
 using Dofins.DTO.Response;
 using Dofins.Interfaces;
 using Dofins.Models;
+using Dofins.Repositories.IRepo;
+using Dofins.Context;
 
 namespace Dofins.Services
 {
     public class RealtimeServices : IRealtime
     {
+/*        private readonly HandleDbContext _db;
 
+        public RealtimeServices(HandleDbContext dbContext)
+        {
+            _db = dbContext;
+        }*/
+
+   /*     public IintradayRepo _intraday;
+
+        public RealtimeServices(IintradayRepo intraday) { _intraday = intraday;}
+*/
         List<String> symbols = new List<string> { "CDC", "CTD", "DIG", "FTS", "GMD", "HAX", "KSB", "LPB", "NVL", "SSI", "SZC", "VIC", "VIX", "VND", "CEO", "HUT", "IDC" };
 
 
@@ -85,11 +97,15 @@ namespace Dofins.Services
                     if (messageIR != null)
                     {
                         List<IntradayQuote> stocks = JsonConvert.DeserializeObject<List<IntradayQuote>>(messageIR.ToString());
-                        foreach (var stock in stocks)
+                                            foreach (var stock in stocks)
                         {
                             if (symbols.Contains(stock.Symbol))
                             {
+                               
                                 stockCombine.Add(stock);
+            /*                     _db.intradayQuotes.AddRangeAsync(stock);
+                                 _db.SaveChangesAsync();*/
+                                Console.WriteLine("test");
                             }
                         }
                     }

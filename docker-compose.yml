@@ -1,15 +1,15 @@
-version: '3.4'
+version: '3'
 
 services:
   dofins_database:
-    image: postgres:latest
+    image: postgres:16.2-alpine3.19
     container_name: dofins_database
     environment:
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
+      - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=dofins
     volumes:
-        - ./.containers/dofins_database:/var/lib/postgresql/data
+        - ./dofins_database:/var/lib/postgresql/data
     ports:
         - 5432:5432
     healthcheck:

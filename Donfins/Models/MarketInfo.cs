@@ -2,6 +2,8 @@
 {
     public class MarketInfo
     {
+        public long ID { get; set; }
+
         public string Exchange { get; set; }
 
         public string IndexName

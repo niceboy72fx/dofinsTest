@@ -5,13 +5,14 @@ using System.Text;
 using Dofins.Interfaces;
 using Dofins.Models;
 using Dofins.Services;
+using Dofins.Context;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.WebHost.UseUrls("http://localhost:4000");
@@ -20,10 +21,24 @@ builder.Services.AddSingleton<IAuthentication, AuthenticationServices>();
 
 builder.Services.AddSingleton<IRealtime, RealtimeServices>();
 
+/*builder.Services.AddDbContext<HandleDbContext>(options => options.UseNpgsql(
+          builder.Configuration.GetConnectionString("Postgres")
+));
+*/
 
+builder.Services.AddSingleton<HandleDbContext>(serviceProvider =>
+{
+    var optionsBuilder = new DbContextOptionsBuilder<HandleDbContext>();
+    optionsBuilder.UseNpgsql(builder.Configuration.GetConnectionString("Postgres"));
+    return new HandleDbContext(optionsBuilder.Options);
+});
+
+/*builder.Services.AddSingleton<HandleDbContext>();
+*/
 var app = builder.Build();
 
 app.UseWebSockets();
+
 
 
 app.Map("/invokeGetAllQuote", async context =>
@@ -274,7 +289,6 @@ app.Map("/fireAnt", async context =>
 
 await app.RunAsync();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

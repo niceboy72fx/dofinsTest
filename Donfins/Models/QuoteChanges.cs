@@ -2,6 +2,8 @@
 {
     public class QuoteChanges
     {
+        public long ID { get; set; }
+
         public DateTime? Date { get; set; }
 
         public string Symbol { get; set; }
