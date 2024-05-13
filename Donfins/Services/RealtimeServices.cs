@@ -6,22 +6,30 @@ using Dofins.Interfaces;
 using Dofins.Models;
 using Dofins.Repositories.IRepo;
 using Dofins.Context;
+using Dofins.Repositories.Repo;
 
 namespace Dofins.Services
 {
     public class RealtimeServices : IRealtime
     {
-/*        private readonly HandleDbContext _db;
+        private readonly HandleDbContext _db;
 
-        public RealtimeServices(HandleDbContext dbContext)
+        public IintradayRepo _intraday;
+        public ImarketInforRepo _marketInfor;
+        public IquoteChangesRepo _quoteChanges;
+
+        public RealtimeServices(HandleDbContext dbContext, IintradayRepo intraday, ImarketInforRepo marketInfor, IquoteChangesRepo iquoteChanges)
         {
+            _intraday = intraday;
+            _marketInfor = marketInfor;
+            _quoteChanges = iquoteChanges;
             _db = dbContext;
-        }*/
+        }
 
-   /*     public IintradayRepo _intraday;
 
-        public RealtimeServices(IintradayRepo intraday) { _intraday = intraday;}
-*/
+
+
+
         List<String> symbols = new List<string> { "CDC", "CTD", "DIG", "FTS", "GMD", "HAX", "KSB", "LPB", "NVL", "SSI", "SZC", "VIC", "VIX", "VND", "CEO", "HUT", "IDC" };
 
 
@@ -59,7 +67,8 @@ namespace Dofins.Services
                             if (symbols.Contains(stock.Symbol))
                             {
                                 stockCombine.Add(stock);
-                            }
+/*                                _quoteChanges.InsertAsync(stock);
+*/                            }
                         }
                     }
                     else
@@ -103,9 +112,8 @@ namespace Dofins.Services
                             {
                                
                                 stockCombine.Add(stock);
-            /*                     _db.intradayQuotes.AddRangeAsync(stock);
-                                 _db.SaveChangesAsync();*/
-                                Console.WriteLine("test");
+                  /*              _db.intradayQuotes.AddRangeAsync(stock);
+                                _db.SaveChangesAsync();*/
                             }
                         }
                     }
@@ -150,7 +158,8 @@ namespace Dofins.Services
                         foreach (var stock in stocks)
                         {
                             stockCombine.Add(stock);
-                        }
+/*                            _marketInfor.InsertAsync(stock);
+*/                        }
                     }
                     else
                     {
@@ -190,7 +199,9 @@ namespace Dofins.Services
                     List<MarketInfoChanges> stocks = JsonConvert.DeserializeObject<List<MarketInfoChanges>>(messageIR);
                     foreach (var stock in stocks)
                     {
-                        stockCombine.Add(stock); 
+                        Console.WriteLine(stock);
+                        stockCombine.Add(stock);
+/*                        _marketInfor.InsertAsync(stock);*/
                     }
                 }
                 else

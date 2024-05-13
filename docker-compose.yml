@@ -30,20 +30,7 @@ services:
         timeout: 20s
         retries: 8
   
-        
-  dofins:
-    image: ${DOCKER_REGISTRY-}dofins
-    build:
-      context: .
-      dockerfile: Donfins/Service
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:2345
-    ports:
-        - "2345:4000"
-    depends_on:
-        dofins_database:
-            condition: service_healthy
+
    
   #dofins_nginx:
    # build:

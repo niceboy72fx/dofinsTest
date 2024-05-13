@@ -21,10 +21,10 @@ builder.Services.AddSingleton<IAuthentication, AuthenticationServices>();
 
 builder.Services.AddSingleton<IRealtime, RealtimeServices>();
 
-/*builder.Services.AddDbContext<HandleDbContext>(options => options.UseNpgsql(
+builder.Services.AddDbContext<HandleDbContext>(options => options.UseNpgsql(
           builder.Configuration.GetConnectionString("Postgres")
 ));
-*/
+
 
 builder.Services.AddSingleton<HandleDbContext>(serviceProvider =>
 {

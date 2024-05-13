@@ -1,8 +1,12 @@
-﻿namespace Dofins.Models
+﻿using System.Numerics;
+
+namespace Dofins.Models
 {
     public class MarketInfoChanges
     {
         public MarketInfoChanges() { }
+
+        public long id { get; set;  }
         public string Exchange { get; set; }
 
         public DateTime? Date { get; set; }

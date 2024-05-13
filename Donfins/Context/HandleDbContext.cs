@@ -11,7 +11,7 @@ namespace Dofins.Context
         public HandleDbContext(DbContextOptions<HandleDbContext> options) : base(options) { }
 
         public DbSet<IntradayQuote> intradayQuotes { get; set; }
-        public DbSet<MarketInfo> marketInfo { get; set; }
+        public DbSet<MarketInfoChanges> marketInfo { get; set; }
         public DbSet<QuoteChanges> quoteChanges { get; set; }
 
     }

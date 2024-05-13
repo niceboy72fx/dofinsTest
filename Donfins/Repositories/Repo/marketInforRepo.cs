@@ -29,7 +29,7 @@ namespace Dofins.Repositories.Repo
                 string operation = parts[0];
                 string data = parts[1];
 
-                string response = await GetIntradayNow();
+                string response = await GetUpdateMarket();
 
                 byte[] responseBytes = Encoding.ASCII.GetBytes(response);
                 await client.SendAsync(responseBytes, SocketFlags.None);
@@ -42,24 +42,24 @@ namespace Dofins.Repositories.Repo
             }
         }
 
-        public async Task<string> GetIntradayNow()
+        public async Task<string> GetUpdateMarket()
         {
             DateTime currentDay = DateTime.Now.Date;
-            var intradayQuotes = await _db.marketInfo
-                .Where(quote => quote.Date.Date == currentDay)
+            var MarketInfoChange = await _db.marketInfo
+                .Where(quote => quote.Date == currentDay)
                 .ToListAsync();
-            return JsonConvert.SerializeObject(intradayQuotes);
+            return JsonConvert.SerializeObject(MarketInfoChange);
         }
 
-        public async Task BulkInsertAsync(IEnumerable<IntradayQuote> entities)
+        public async Task BulkInsertAsync(IEnumerable<MarketInfoChanges> entities)
         {
-            await _db.intradayQuotes.AddRangeAsync(entities);
+            await _db.marketInfo.AddRangeAsync(entities);
             await _db.SaveChangesAsync();
         }
 
-        public async Task InsertAsync(IntradayQuote entities)
+        public async Task InsertAsync(MarketInfoChanges entities)
         {
-            await _db.intradayQuotes.AddRangeAsync(entities);
+            await _db.marketInfo.AddRangeAsync(entities);
             await _db.SaveChangesAsync();
         }
     }
