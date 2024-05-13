@@ -12,7 +12,7 @@ namespace Dofins.Services
 {
     public class RealtimeServices : IRealtime
     {
-        private readonly HandleDbContext _db;
+      /*  private readonly HandleDbContext _db;
 
         public IintradayRepo _intraday;
         public ImarketInforRepo _marketInfor;
@@ -25,7 +25,7 @@ namespace Dofins.Services
             _quoteChanges = iquoteChanges;
             _db = dbContext;
         }
-
+*/
 
 
 
