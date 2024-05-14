@@ -13,6 +13,8 @@ namespace Dofins.Context
         public DbSet<IntradayQuote> intradayQuotes { get; set; }
         public DbSet<MarketInfoChanges> marketInfo { get; set; }
         public DbSet<QuoteChanges> quoteChanges { get; set; }
+        public DbSet<Tickers> tickers { get; set; }
+        public DbSet<DailyInfor > dailyInfors { get; set; } 
 
     }
 }

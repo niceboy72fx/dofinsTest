@@ -12,7 +12,7 @@ namespace Dofins.Services
 {
     public class RealtimeServices : IRealtime
     {
-      /*  private readonly HandleDbContext _db;
+       /* private readonly HandleDbContext _db;
 
         public IintradayRepo _intraday;
         public ImarketInforRepo _marketInfor;
@@ -24,8 +24,8 @@ namespace Dofins.Services
             _marketInfor = marketInfor;
             _quoteChanges = iquoteChanges;
             _db = dbContext;
-        }
-*/
+        }*/
+
 
 
 
@@ -62,13 +62,13 @@ namespace Dofins.Services
                     if (messageIR != null)
                     {
                         List<QuoteChanges> stocks = JsonConvert.DeserializeObject<List<QuoteChanges>>(messageIR.ToString());
+                        Console.WriteLine(messageIR.ToString());
                         foreach (var stock in stocks)
                         {
                             if (symbols.Contains(stock.Symbol))
                             {
                                 stockCombine.Add(stock);
-/*                                _quoteChanges.InsertAsync(stock);
-*/                            }
+                            }
                         }
                     }
                     else
@@ -158,8 +158,7 @@ namespace Dofins.Services
                         foreach (var stock in stocks)
                         {
                             stockCombine.Add(stock);
-/*                            _marketInfor.InsertAsync(stock);
-*/                        }
+                        }
                     }
                     else
                     {

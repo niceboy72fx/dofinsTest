@@ -1,9 +1,13 @@
 ﻿using Dofins.Context;
 using Dofins.Interfaces;
 using Dofins.Services;
+using Microsoft.AspNetCore.Connections;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using StackExchange.Redis;
+using Microsoft.AspNetCore.Hosting;
+using Dofins.Controllers;
+
 
 namespace Dofins
 {
@@ -11,43 +15,36 @@ namespace Dofins
     
     public class Startup
     {
-        public IConfiguration Configuration { get; }
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
+
+        public IConfiguration Configuration { get; }
+
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<IRealtime, RealtimeServices>();
-            services.AddTransient<IAuthentication, AuthenticationServices>();
-
-            services.AddControllersWithViews();
-            services.AddRazorPages();
-/*            services.AddDbContext<HandleDbContext>(options =>
-            {
-                options.UseNpgsql(Configuration.GetConnectionString("Postgres"));
-            });
-*/
-            services.AddSingleton<IConnectionMultiplexer>(provider =>
-            {
-                var configuration = ConfigurationOptions.Parse(Configuration.GetConnectionString("Redis"));
-                return ConnectionMultiplexer.Connect(configuration);
-            });
+            var connectionFactory = new ConnectionFactory();
+            var connectionManager = new ConnectionManager();
+            services.AddScoped(ctx => new RealTimeController(connectionFactory, connectionManager));
+            services.AddControllers().AddControllersAsServices();
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-            app.UseRouting();
-            app.UseEndpoints(endpoints =>
+            else
             {
-                endpoints.MapControllers();
-            });
-        }
+                app.UseHsts();
+            }
 
+            app.UseWebSockets(new WebSocketOptions { KeepAliveInterval = TimeSpan.FromSeconds(30) });
+            app.UseRouting();
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+        }
     }
 }
 

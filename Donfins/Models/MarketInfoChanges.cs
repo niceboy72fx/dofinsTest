@@ -9,6 +9,18 @@ namespace Dofins.Models
         public long id { get; set;  }
         public string Exchange { get; set; }
 
+        public string IndexName
+        {
+            get
+            {
+                if (this.Exchange == "HOSTC")
+                    return "VN-INDEX";
+                if (this.Exchange == "HASTC")
+                    return "HNX-INDEX";
+                return !(this.Exchange == "UPCOM") ? this.Exchange : "UP-INDEX";
+            }
+        }
+
         public DateTime? Date { get; set; }
 
         public int? Minutes { get; set; }
