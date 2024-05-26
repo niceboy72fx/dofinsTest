@@ -1,5 +1,6 @@
 ﻿namespace Dofins.Models
 {
+   
     public class IntradayQuote
     {
         public IntradayQuote() { }
